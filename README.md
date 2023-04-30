@@ -51,9 +51,16 @@ PEA uses environment variables for configuration by default.
 2. Add an input field in your application for the user to enter the email address.
 3. Send a auth request to PEA with the user email and callback URL.
 
+```bash
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"email": "user@csie.cool", "callback": "https://your.app/callback/url"}' \
+    https://pea.cool/api/app/your-app-id/login
+```
+
 Then, PEA will send an email to the user with the callback URL and a JWT token in the following format:
 
-```curl
+```bash
 https://your.app/callback/url?token=<JWT_TOKEN>
 ```
 
