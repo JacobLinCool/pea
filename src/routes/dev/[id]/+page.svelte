@@ -7,6 +7,10 @@
 
 <svelte:head>
 	<title>{data.dev.name} (@{data.dev.id}) | PEA</title>
+	<meta
+		name="description"
+		content="Find the best apps made by {data.dev.name} (@{data.dev.id}) on PEA."
+	/>
 </svelte:head>
 
 <div class="flex w-full flex-col items-center gap-4 p-4">
