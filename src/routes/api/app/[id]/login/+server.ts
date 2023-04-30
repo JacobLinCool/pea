@@ -4,6 +4,7 @@ import { z } from "zod";
 import { error, json } from "@sveltejs/kit";
 import * as JWT from "@tsndr/cloudflare-worker-jwt";
 import type { RequestHandler } from "./$types";
+import email from "./email";
 
 const LoginPayloadSchema = z.object({
 	email: z.string().max(128).email(),
@@ -116,7 +117,12 @@ async function send(from: string, to: string, app: Application, link: string): P
 			content: [
 				{
 					type: "text/html",
-					value: `You are receiving this email because you requested a login link for ${app.name}.<br><br><a href="${link}">Click here to login</a>`,
+					value: email({
+						head: `Login to ${app.name}`,
+						body: `You are receiving this email because you requested a login link for ${app.name}. If you did not request this, please ignore this email. Otherwise, please click the button or link below to login.`,
+						link: link,
+						login: "Login",
+					}),
 				},
 			],
 		}),

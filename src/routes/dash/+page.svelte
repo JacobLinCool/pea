@@ -27,7 +27,7 @@
 	async function check_param() {
 		const url = new URL(window.location.href);
 		const params = new URLSearchParams(url.search);
-		const t = params.get("pea_token");
+		const t = params.get("token");
 		if (t) {
 			$token = t;
 			await goto("/dash", { replaceState: true });
