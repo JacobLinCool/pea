@@ -25,6 +25,7 @@ _Pure Email Auth._
 2. Fork this repository.
 3. Create a new Cloudflare Pages project with the forked repository.
 4. Setup the environment variables and D1 binding in the Cloudflare Pages project.
+5. Trigger `/api/sys/setup` to check if the setup is successful.
 
 ## Configuration
 
