@@ -21,10 +21,17 @@ export const GET: RequestHandler = async ({ platform, params, locals }) => {
 
 	const app = await db
 		.selectFrom("Application")
-		.selectAll()
+		.select([
+			"Application.id",
+			"Application.name",
+			"Application.description",
+			"Application.owner",
+			"Application.domain",
+			"Application.created",
+		])
 		.where("Application.id", "=", id)
 		.innerJoin("Developer", "Developer.id", "Application.owner")
-		.select("email")
+		.select("Developer.email")
 		.executeTakeFirst();
 	if (!app) {
 		throw error(404, "Application not found");
@@ -65,10 +72,17 @@ export const PUT: RequestHandler = async ({ platform, params, locals, request })
 
 	const app = await db
 		.selectFrom("Application")
-		.selectAll()
+		.select([
+			"Application.id",
+			"Application.name",
+			"Application.description",
+			"Application.owner",
+			"Application.domain",
+			"Application.created",
+		])
 		.where("Application.id", "=", id)
 		.innerJoin("Developer", "Developer.id", "Application.owner")
-		.select("email")
+		.select("Developer.email")
 		.executeTakeFirst();
 	if (app) {
 		if (locals.email !== app.email) {
@@ -100,7 +114,7 @@ export const PUT: RequestHandler = async ({ platform, params, locals, request })
 
 	const dev = await db
 		.selectFrom("Developer")
-		.selectAll()
+		.select("Developer.id")
 		.where("Developer.email", "=", locals.email)
 		.executeTakeFirst();
 	if (!dev) {
