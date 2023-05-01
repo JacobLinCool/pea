@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from "svelte";
+	import { t } from "svelte-i18n";
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
@@ -48,7 +49,7 @@
 			if (err instanceof Error) {
 				error = err.message;
 			} else {
-				error = "Unknown Error";
+				error = $t("error.unknown");
 			}
 		} finally {
 			running = false;
@@ -57,18 +58,20 @@
 
 	function check_email() {
 		if (!email) {
-			throw new Error("Email is required");
+			throw new Error($t("error.email-is-required"));
 		}
 
 		const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 		if (!regex.test(email)) {
-			throw new Error("Invalid email");
+			throw new Error($t("error.invalid-email"));
 		}
 	}
 </script>
 
 <svelte:head>
-	<title>Login {data.app.name}</title>
+	<title>
+		{$t("login.login-app-name", { values: { app: data.app.name } })}
+	</title>
 	<meta
 		name="description"
 		content="Use your email to login to {data.app.name}, an app by {data.app.owner}. {data.app
@@ -79,12 +82,14 @@
 <div class="flex h-full w-full flex-col items-center justify-center p-4">
 	<div class="w-full max-w-md">
 		{#if !ok}
-			<h1 class="mb-4 text-2xl font-bold">Login {data.app.name}</h1>
+			<h1 class="mb-4 text-2xl font-bold">
+				{$t("login.login-app-name", { values: { app: data.app.name } })}
+			</h1>
 			<div class="form-control w-full">
 				<div class="input-group w-full">
 					<input
 						type="text"
-						placeholder="Enter Your Email"
+						placeholder={$t("login.enter-your-email")}
 						class="input-bordered input flex-1"
 						bind:value={email}
 						disabled={running}
@@ -96,7 +101,7 @@
 						disabled={running}
 						on:click={login}
 					>
-						Login
+						{$t("login.login")}
 					</button>
 				</div>
 				{#if error}
@@ -107,7 +112,7 @@
 			</div>
 		{:else}
 			<div class="flex flex-col items-center justify-center">
-				<h1 class="mb-4 text-3xl font-bold">Check Your Email</h1>
+				<h1 class="mb-4 text-3xl font-bold">{$t("login.check-your-email")}</h1>
 				<p class="text-center italic text-primary">
 					{email}
 				</p>

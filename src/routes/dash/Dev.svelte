@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { get } from "$lib/preference";
 	import type { Developer } from "$lib/server/db/schema";
+	import { t } from "svelte-i18n";
 
 	export let dev: Developer | null;
 
@@ -41,28 +42,28 @@
 		<div class="card-body">
 			<div class="form-control w-full">
 				<label class="label" for="">
-					<span class="label-text">Dev ID</span>
+					<span class="label-text">{$t("dash.dev-id")}</span>
 				</label>
 				<input
 					type="text"
-					placeholder="Your Dev ID (Cannot be changed)"
+					placeholder={$t("dash.your-dev-id")}
 					class="input-bordered input w-full"
 					bind:value={id}
 					on:input={() => (id = id.replace(/[^a-zA-Z0-9-_]/g, ""))}
 					disabled={!!dev}
 				/>
 				<label class="label" for="">
-					<span class="label-text">Dev Name</span>
+					<span class="label-text">{$t("dash.dev-name")}</span>
 				</label>
 				<input
 					type="text"
-					placeholder="Your Dev Name"
+					placeholder={$t("dash.your-dev-name")}
 					class="input-bordered input w-full"
 					bind:value={name}
 				/>
 
 				<button class="btn-primary btn my-4" on:click={update} disabled={running}>
-					Save
+					{$t("dash.save")}
 				</button>
 			</div>
 		</div>

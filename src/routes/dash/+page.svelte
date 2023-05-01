@@ -3,6 +3,7 @@
 	import { get } from "$lib/preference";
 	import type { Developer } from "$lib/server/db/schema";
 	import { onMount } from "svelte";
+	import { t } from "svelte-i18n";
 	import Apps from "./Apps.svelte";
 	import Dev from "./Dev.svelte";
 	import Language from "./Language.svelte";
@@ -59,12 +60,12 @@
 </script>
 
 <svelte:head>
-	<title>PEA Developer Dashboard</title>
+	<title>{$t("dash.pea-developer-dashboard")}</title>
 </svelte:head>
 
 <div class="h-full w-full overflow-auto">
 	<div class="flex h-full w-full flex-col items-center justify-start gap-6 p-4">
-		<div class="text-3xl font-bold">PEA Developer Dashboard</div>
+		<div class="text-3xl font-bold">{$t("dash.pea-developer-dashboard")}</div>
 
 		{#key dev?.id}
 			{#if $token}

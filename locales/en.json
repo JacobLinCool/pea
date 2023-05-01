@@ -1,8 +1,45 @@
 {
-	"welcome": "Welcome to PEA",
-	"with-tech": "Pure Email Auth!",
+	"app": {
+		"description": "Application description",
+		"domain": "Domain",
+		"id": "Application ID",
+		"name": "Application name",
+		"regexp-for-domain": "RegExp for allowed domains / paths",
+		"save": "Save",
+		"secret": "Secret",
+		"secret-for-jwt-signing": "Secret for JWT signing",
+		"since": "Since"
+	},
+	"dash": {
+		"dev-id": "Dev ID",
+		"dev-name": "Dev Name",
+		"pea-developer-dashboard": "PEA Developer Dashboard",
+		"save": "Save",
+		"your-dev-id": "Your Dev ID (Cannot be changed)",
+		"your-dev-name": "Your Dev Name"
+	},
+	"error": {
+		"application-is-deactivated": "Application is deactivated",
+		"application-not-found": "Application not found",
+		"email-blocked-by-application": "Email blocked by application",
+		"email-is-required": "Email is required",
+		"invalid-callback": "Invalid callback",
+		"invalid-email": "Invalid email",
+		"invalid-secret": "Invalid secret",
+		"not-found": "Not Found",
+		"unknown": "Unknown Error"
+	},
 	"lang": {
 		"en": "English",
 		"zh-TW": "正體中文"
-	}
+	},
+	"language": "Language",
+	"login": {
+		"check-your-email": "Check Your Email",
+		"enter-your-email": "Enter Your Email",
+		"login": "Login",
+		"login-app-name": "Login {app}"
+	},
+	"welcome": "Welcome to PEA",
+	"with-tech": "Pure Email Auth!"
 }

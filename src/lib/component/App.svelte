@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { invalidateAll } from "$app/navigation";
 	import { get } from "$lib/preference";
+	import { t, date } from "svelte-i18n";
 
 	export let editable = false;
 	export let new_app = false;
@@ -15,6 +16,7 @@
 	};
 
 	let token = get("pea_token");
+	let lang = get("lang");
 
 	let running = false;
 	let error = "";
@@ -30,6 +32,7 @@
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${$token}`,
+					"Accept-Language": $lang || navigator.language,
 				},
 				body: JSON.stringify({
 					name: app.name,
@@ -50,7 +53,7 @@
 			if (err instanceof Error) {
 				error = err.message;
 			} else {
-				error = "Unknown error";
+				error = $t("error.unknown");
 			}
 		} finally {
 			running = false;
@@ -67,7 +70,7 @@
 					class="input-ghost input hover:input-bordered"
 					class:input-bordered={new_app}
 					bind:value={app.name}
-					placeholder="Application name"
+					placeholder={$t("app.name")}
 				/>
 			{:else}
 				{app.name}
@@ -80,7 +83,7 @@
 						class:input-bordered={new_app}
 						bind:value={app.id}
 						on:input={() => (app.id = app.id.replace(/[^a-zA-Z0-9-_]/g, ""))}
-						placeholder="Application ID"
+						placeholder={$t("app.id")}
 					/>
 				{:else}
 					<span class="opacity-50"> #{app.id}</span>
@@ -93,7 +96,7 @@
 					class="textarea-ghost textarea w-full hover:textarea-bordered"
 					class:textarea-bordered={new_app}
 					bind:value={app.description}
-					placeholder="Application description"
+					placeholder={$t("app.description")}
 				/>
 			{:else}
 				{app.description}
@@ -101,7 +104,8 @@
 		</p>
 
 		<p class="text-sm opacity-50">
-			Since {new Date(app.created).toLocaleDateString()}
+			{$t("app.since")}
+			{$date(new Date(app.created), { format: "medium" })}
 		</p>
 
 		{#if editable}
@@ -109,25 +113,25 @@
 
 			<div class="form-control">
 				<label class="label" for="">
-					<span class="label-text">Domain</span>
+					<span class="label-text">{$t("app.domain")}</span>
 				</label>
 				<input
 					type="text"
 					class="input-ghost input input-sm hover:input-bordered"
 					class:input-bordered={new_app}
 					bind:value={app.domain}
-					placeholder="RegExp for allowed domains / paths"
+					placeholder={$t("app.regexp-for-domain")}
 				/>
 
 				<label class="label" for="">
-					<span class="label-text">Secret</span>
+					<span class="label-text">{$t("app.secret")}</span>
 				</label>
 				<input
 					type="text"
 					class="input-ghost input input-sm hover:input-bordered"
 					class:input-bordered={new_app}
 					bind:value={app.secret}
-					placeholder="Secret for JWT signing"
+					placeholder={$t("app.secret-for-jwt-signing")}
 				/>
 			</div>
 
@@ -137,7 +141,7 @@
 					on:click={save}
 					disabled={running}
 				>
-					Save
+					{$t("app.save")}
 				</button>
 			</div>
 		{/if}

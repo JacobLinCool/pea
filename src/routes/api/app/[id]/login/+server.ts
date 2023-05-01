@@ -1,5 +1,6 @@
 import { ApplicationSchema, type Application } from "$lib/server/db/schema";
 import { UserSchema } from "$lib/server/db/schema";
+import { $t } from "$lib/server/i18n";
 import { sys } from "$lib/server/sys";
 import { z } from "zod";
 import { error, json } from "@sveltejs/kit";
@@ -30,7 +31,7 @@ export const POST: RequestHandler = async ({ platform, request, params, url }) =
 			.map((x) => new RegExp(x))
 			.some((x) => x.test(payload.email))
 	) {
-		throw error(400, "Invalid email");
+		throw error(400, await $t("error.invalid-email"));
 	}
 
 	const ip =
@@ -44,11 +45,11 @@ export const POST: RequestHandler = async ({ platform, request, params, url }) =
 		.where("Application.id", "=", id)
 		.executeTakeFirst();
 	if (!app) {
-		throw error(404, "Application not found");
+		throw error(404, await $t("error.application-not-found"));
 	}
 
 	if (app.active === false) {
-		throw error(400, "Application is deactivated");
+		throw error(400, await $t("error.application-is-deactivated"));
 	}
 
 	if (
@@ -58,18 +59,18 @@ export const POST: RequestHandler = async ({ platform, request, params, url }) =
 			.map((x) => new RegExp(x))
 			.some((x) => x.test(payload.email))
 	) {
-		throw error(400, "Email blocked by application");
+		throw error(400, await $t("error.email-blocked-by-application"));
 	}
 
 	const regex = new RegExp(app.domain);
 	if (!regex.test(payload.callback)) {
-		throw error(400, "Invalid callback");
+		throw error(400, await $t("error.invalid-callback"));
 	}
 
 	let additionals: Record<string, unknown> = {};
 	if (payload.secret) {
 		if (payload.secret !== app.secret) {
-			throw error(400, "Invalid secret");
+			throw error(400, await $t("error.invalid-secret"));
 		}
 		additionals = payload.extend || {};
 	}
