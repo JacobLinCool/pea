@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from "svelte";
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
@@ -7,6 +8,14 @@
 	let error = "";
 	let ok = false;
 	let running = false;
+
+	onMount(() => {
+		const search = new URLSearchParams(window.location.search);
+
+		if (search.has("email")) {
+			email = search.get("email") ?? "";
+		}
+	});
 
 	async function login() {
 		if (!email || running) {
