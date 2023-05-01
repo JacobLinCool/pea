@@ -1,10 +1,11 @@
+import { DeveloperSchema } from "$lib/server/db/schema";
 import { sys } from "$lib/server/sys";
 import { z } from "zod";
 import { error, json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 
 const DevUpsertSchema = z.object({
-	name: z.string(),
+	name: DeveloperSchema.shape.name,
 });
 
 /**

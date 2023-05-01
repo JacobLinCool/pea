@@ -15,6 +15,8 @@ export interface Application {
 	secret: string;
 	domain: string;
 	created: number;
+	active: boolean;
+	allowlist: string;
 }
 
 export interface User {
@@ -37,7 +39,7 @@ export interface Database {
 	Login: Login;
 }
 
-export const DeveloperSchema: z.ZodSchema<Developer> = z.object({
+export const DeveloperSchema = z.object({
 	id: z
 		.string()
 		.min(3)
@@ -46,9 +48,9 @@ export const DeveloperSchema: z.ZodSchema<Developer> = z.object({
 	email: z.string().max(128).email(),
 	name: z.string().min(3).max(128),
 	created: z.number().int().positive(),
-});
+}) satisfies z.ZodSchema<Developer>;
 
-export const ApplicationSchema: z.ZodSchema<Application> = z.object({
+export const ApplicationSchema = z.object({
 	id: z
 		.string()
 		.min(3)
@@ -64,14 +66,16 @@ export const ApplicationSchema: z.ZodSchema<Application> = z.object({
 	secret: z.string().min(12).max(256),
 	domain: z.string().min(3).max(256),
 	created: z.number().int().positive(),
-});
+	active: z.boolean(),
+	allowlist: z.string().min(0).max(256),
+}) satisfies z.ZodSchema<Application>;
 
-export const UserSchema: z.ZodSchema<User> = z.object({
+export const UserSchema = z.object({
 	email: z.string().max(128).email(),
 	created: z.number().int().positive(),
-});
+}) satisfies z.ZodSchema<User>;
 
-export const LoginSchema: z.ZodSchema<Login> = z.object({
+export const LoginSchema = z.object({
 	id: z.string(),
 	app: z
 		.string()
@@ -81,4 +85,4 @@ export const LoginSchema: z.ZodSchema<Login> = z.object({
 	user: z.string().max(128).email(),
 	time: z.number().int().positive(),
 	ip: z.string().ip(),
-});
+}) satisfies z.ZodSchema<Login>;

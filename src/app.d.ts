@@ -15,7 +15,7 @@ declare global {
 				__D1_BETA__D1?: D1Database;
 				PEA_APP_SECRET?: string;
 				PEA_APP_EMAIL?: string;
-				PEA_WHITE_LIST?: string;
+				PEA_ALLOWLIST?: string;
 			};
 			context?: EventContext;
 			caches?: CacheStorage;

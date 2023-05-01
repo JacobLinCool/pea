@@ -1,13 +1,16 @@
+import { ApplicationSchema } from "$lib/server/db/schema";
 import { sys } from "$lib/server/sys";
 import { z } from "zod";
 import { error, json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 
 const AppUpsertSchema = z.object({
-	name: z.string(),
-	description: z.string(),
-	secret: z.string(),
-	domain: z.string(),
+	name: ApplicationSchema.shape.name,
+	description: ApplicationSchema.shape.description,
+	secret: ApplicationSchema.shape.secret,
+	domain: ApplicationSchema.shape.domain,
+	active: ApplicationSchema.shape.active,
+	allowlist: ApplicationSchema.shape.allowlist,
 });
 
 /**
@@ -28,6 +31,8 @@ export const GET: RequestHandler = async ({ platform, params, locals }) => {
 			"Application.owner",
 			"Application.domain",
 			"Application.created",
+			"Application.active",
+			"Application.allowlist",
 		])
 		.where("Application.id", "=", id)
 		.innerJoin("Developer", "Developer.id", "Application.owner")
@@ -53,6 +58,8 @@ export const GET: RequestHandler = async ({ platform, params, locals }) => {
 			owner: app.owner,
 			domain: app.domain,
 			created: app.created,
+			active: app.active,
+			allowlist: app.allowlist,
 		});
 	}
 };
@@ -79,6 +86,8 @@ export const PUT: RequestHandler = async ({ platform, params, locals, request })
 			"Application.owner",
 			"Application.domain",
 			"Application.created",
+			"Application.active",
+			"Application.allowlist",
 		])
 		.where("Application.id", "=", id)
 		.innerJoin("Developer", "Developer.id", "Application.owner")
@@ -109,6 +118,9 @@ export const PUT: RequestHandler = async ({ platform, params, locals, request })
 			description: app.description,
 			owner: app.owner,
 			created: app.created,
+			domain: app.domain,
+			active: app.active,
+			allowlist: app.allowlist,
 		});
 	}
 
@@ -134,6 +146,8 @@ export const PUT: RequestHandler = async ({ platform, params, locals, request })
 			domain: data.domain,
 			secret: data.secret,
 			created: Date.now(),
+			active: true,
+			allowlist: "",
 		})
 		.returningAll()
 		.executeTakeFirst();
@@ -150,5 +164,7 @@ export const PUT: RequestHandler = async ({ platform, params, locals, request })
 		owner: new_app.owner,
 		domain: new_app.domain,
 		created: new_app.created,
+		active: new_app.active,
+		allowlist: new_app.allowlist,
 	});
 };

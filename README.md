@@ -37,7 +37,7 @@ PEA uses environment variables for configuration by default.
 | ---------------- | ------------------------------------------------------------ | ------------------- |
 | `PEA_APP_SECRET` | A secret string used to sign the JWT token.                  | `MY_PEA_APP_SECRET` |
 | `PEA_APP_EMAIL`  | The email address of the PEA Authentication.                 | `pea@csie.cool`     |
-| `PEA_WHITE_LIST` | A comma-separated list of RegExp strings to match the email. | `^.*@csie\.cool$`   |
+| `PEA_ALLOWLIST`  | A comma-separated list of RegExp strings to match the email. | `^.*@csie\.cool$`   |
 
 ## Authentication Model
 

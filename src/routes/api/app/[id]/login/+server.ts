@@ -1,4 +1,5 @@
-import type { Application } from "$lib/server/db/schema";
+import { ApplicationSchema, type Application } from "$lib/server/db/schema";
+import { UserSchema } from "$lib/server/db/schema";
 import { sys } from "$lib/server/sys";
 import { z } from "zod";
 import { error, json } from "@sveltejs/kit";
@@ -7,9 +8,9 @@ import type { RequestHandler } from "./$types";
 import email from "./email";
 
 const LoginPayloadSchema = z.object({
-	email: z.string().max(128).email(),
+	email: UserSchema.shape.email,
 	callback: z.string().max(1024).url(),
-	secret: z.string().max(128).optional(),
+	secret: ApplicationSchema.shape.secret.optional(),
 	extend: z.record(z.string(), z.any()).optional(),
 });
 
@@ -17,14 +18,14 @@ const LoginPayloadSchema = z.object({
  * Send the login email to the user.
  */
 export const POST: RequestHandler = async ({ platform, request, params, url }) => {
-	const { db, email, white_list } = sys(platform);
+	const { db, email, allowlist } = sys(platform);
 
 	const id = params.id.toLowerCase();
 
 	const payload = LoginPayloadSchema.parse(await request.json());
 
 	if (
-		!white_list
+		!allowlist
 			.split(",")
 			.map((x) => new RegExp(x))
 			.some((x) => x.test(payload.email))
@@ -44,6 +45,20 @@ export const POST: RequestHandler = async ({ platform, request, params, url }) =
 		.executeTakeFirst();
 	if (!app) {
 		throw error(404, "Application not found");
+	}
+
+	if (app.active === false) {
+		throw error(400, "Application is deactivated");
+	}
+
+	if (
+		app.allowlist &&
+		!app.allowlist
+			.split(",")
+			.map((x) => new RegExp(x))
+			.some((x) => x.test(payload.email))
+	) {
+		throw error(400, "Email blocked by application");
 	}
 
 	const regex = new RegExp(app.domain);
