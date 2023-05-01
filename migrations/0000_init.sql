@@ -1,6 +1,6 @@
--- Migration number: 0001 	 2023-04-29T11:59:40.598Z
+-- Migration number: 0000 	 2023-04-29T11:59:40.598Z
 
-CREATE TABLE IF NOT EXISTS Developer (
+CREATE TABLE Developer (
     -- the developer id
     id TEXT NOT NULL PRIMARY KEY,
     -- the developer's public email
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS Developer (
     created INT NOT NULL CHECK (created > 0)
 );
 
-CREATE TABLE IF NOT EXISTS Application (
+CREATE TABLE Application (
     -- the application id
     id TEXT NOT NULL PRIMARY KEY,
     -- the developer id
@@ -29,14 +29,14 @@ CREATE TABLE IF NOT EXISTS Application (
     FOREIGN KEY (owner) REFERENCES Developer(id)
 );
 
-CREATE TABLE IF NOT EXISTS User (
+CREATE TABLE User (
     -- email represents the user entity
     email TEXT NOT NULL PRIMARY KEY,
     -- when the user was created
     created INT NOT NULL CHECK (created > 0)
 );
 
-CREATE TABLE IF NOT EXISTS Login (
+CREATE TABLE Login (
     -- the login id
     id TEXT NOT NULL PRIMARY KEY,
     -- application id
