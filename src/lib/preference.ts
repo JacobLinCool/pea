@@ -2,21 +2,23 @@ import { browser } from "$app/environment";
 import { writable } from "svelte/store";
 import type { Writable } from "svelte/store";
 
-type Val = string | null | undefined;
+type PreferenceValue = string | null | undefined;
 
-const cache = new Map<string, Writable<Val>>();
+const cache = new Map<string, Writable<PreferenceValue>>();
+
+type PreferenceOptions = {
+	default_value?: PreferenceValue;
+	ttl?: number;
+};
 
 export function get(
 	key: string,
-	{ default_value = undefined as Val, ttl = 0 } = {},
-): Writable<Val> {
+	{ default_value = undefined, ttl = 0 }: PreferenceOptions = {},
+): Writable<PreferenceValue> {
 	const cached = cache.get(key);
-	if (cached) {
-		console.log("[preference]", "cached", key, cached);
-		return cached;
-	}
+	if (cached) return cached;
 
-	function update(value: Val) {
+	function update(value: PreferenceValue) {
 		if (browser) {
 			localStorage.setItem(`preference:${key}`, JSON.stringify([Date.now(), value]));
 			console.log("[preference]", "updated", key, value);
@@ -24,11 +26,11 @@ export function get(
 	}
 
 	if (browser) {
-		const value = localStorage.getItem(`preference:${key}`);
-		if (value) {
-			const data: [number, Val] = JSON.parse(value);
-			if (Date.now() - data[0] < ttl) {
-				const store = writable(data[1]);
+		const stored_value = localStorage.getItem(`preference:${key}`);
+		if (stored_value) {
+			const [timestamp, value] = JSON.parse(stored_value) as [number, PreferenceValue];
+			if (Date.now() - timestamp < ttl) {
+				const store = writable(value);
 				console.log("[preference]", "restored", key, store);
 				store.subscribe(update);
 				cache.set(key, store);

@@ -1,28 +1,21 @@
+import { env } from "$env/dynamic/private";
 import type { Kysely } from "kysely";
 import { error } from "@sveltejs/kit";
 import { DB } from "./db";
-import type { Database } from "./db/schema";
+import type { DB as Database } from "./db/types";
 
 export function sys(platform?: Readonly<App.Platform>): {
 	db: Kysely<Database>;
 	email: string;
-	secret: string;
-	allowlist: string;
 } {
-	if (
-		!platform?.env?.PEA_APP_EMAIL ||
-		!platform?.env?.PEA_APP_SECRET ||
-		!platform?.env?.PEA_ALLOWLIST
-	) {
-		throw error(500, "Missing environment variables");
+	if (!env?.PEA_APP_EMAIL) {
+		throw error(500, "Missing PEA_APP_EMAIL");
 	}
 
 	const db = DB(platform);
 
 	return {
 		db,
-		email: platform.env.PEA_APP_EMAIL,
-		secret: platform.env.PEA_APP_SECRET,
-		allowlist: platform.env.PEA_ALLOWLIST,
+		email: env.PEA_APP_EMAIL,
 	};
 }

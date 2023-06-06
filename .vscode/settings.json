@@ -27,5 +27,6 @@
 			"templates": ["{$t('{key}'{args})}"],
 			"include": ["src/**/*.{svelte,ts}", "index.html"]
 		}
-	]
+	],
+	"i18n-ally.sourceLanguage": "en"
 }

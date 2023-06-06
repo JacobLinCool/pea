@@ -1,20 +1,28 @@
 {
 	"app": {
+		"about": "About {name}",
+		"active": "Active",
+		"allowlist": "Email Allowlist",
+		"created_by": "Created by {email}",
 		"description": "Application description",
 		"domain": "Domain",
 		"id": "Application ID",
 		"name": "Application name",
 		"regexp-for-domain": "RegExp for allowed domains / paths",
+		"regexps-for-allowlist": "Regex for allowed emails",
 		"save": "Save",
 		"secret": "Secret",
 		"secret-for-jwt-signing": "Secret for JWT signing",
-		"since": "Since"
+		"since": "Since",
+		"website": "Website"
 	},
 	"dash": {
+		"create": "Create",
 		"dev-id": "Dev ID",
 		"dev-name": "Dev Name",
 		"pea-developer-dashboard": "PEA Developer Dashboard",
 		"save": "Save",
+		"update": "Update",
 		"your-dev-id": "Your Dev ID (Cannot be changed)",
 		"your-dev-name": "Your Dev Name"
 	},
@@ -25,6 +33,7 @@
 		"email-is-required": "Email is required",
 		"invalid-callback": "Invalid callback",
 		"invalid-email": "Invalid email",
+		"invalid-request": "Invalid request, no ip or user agent",
 		"invalid-secret": "Invalid secret",
 		"not-found": "Not Found",
 		"unknown": "Unknown Error"

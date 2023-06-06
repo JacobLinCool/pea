@@ -1,55 +1,52 @@
+import { create_app, update_app } from "$lib/server/app";
+import { create_curve, get_curves } from "$lib/server/curve";
 import { sys } from "$lib/server/sys";
-import { error, json } from "@sveltejs/kit";
-import * as JWT from "@tsndr/cloudflare-worker-jwt";
+import { create_user, update_user } from "$lib/server/user";
+import debug from "debug";
+import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 
+const log = debug("pea:setup");
+log.enabled = true;
+
 /**
- * Setup the PEA application.
+ * Setup the PEA application at first run.
  */
-export const GET: RequestHandler = async ({ platform, url, fetch }) => {
-	const { db, email, secret } = sys(platform);
+export const GET: RequestHandler = async ({ platform, url }) => {
+	const { db, email } = sys(platform);
 
-	const app = await db
-		.selectFrom("Application")
-		.select("id")
-		.where("id", "=", "pea")
-		.executeTakeFirst();
-	if (app) {
-		console.log("System already setup.");
-		return json({ ok: true });
+	const created_system_user = await create_user(db, email);
+	if (created_system_user) {
+		await update_user(db, email, {
+			id: "pea",
+			name: "Pure Email Auth",
+			bio: "Pure Email Auth allows you to simply develop applications with email authentication.",
+			avatar: new URL("/icon-256.png", url).toString(),
+		});
+		log(`Created system user with email ${email}`);
+	} else {
+		log("System user already exists.");
 	}
 
-	const jwt = await JWT.sign({ sub: email }, secret);
-
-	const res_a = await fetch("/api/dev/pea", {
-		method: "PUT",
-		headers: {
-			"Content-Type": "application/json",
-			Authorization: `Bearer ${jwt}`,
-		},
-		body: JSON.stringify({
-			name: "PEA - Pure Email Auth",
-		}),
-	});
-	if (!res_a.ok) {
-		throw error(500, "Failed to create System Developer.");
+	try {
+		await create_app(db, "pea", email, "PEA", "^.+$", "^" + url.origin);
+		await update_app(db, "pea", {
+			url: "https://github.com/JacobLinCool/pea",
+			description:
+				"Pure Email Auth allows you to simply develop applications with email authentication.",
+			logo: new URL("/icon-256.png", url).toString(),
+		});
+		log("Created system app");
+	} catch (e) {
+		log("System app already exists.");
 	}
 
-	const res_b = await fetch("/api/app/pea", {
-		method: "PUT",
-		headers: {
-			"Content-Type": "application/json",
-			Authorization: `Bearer ${jwt}`,
-		},
-		body: JSON.stringify({
-			name: "PEA",
-			description: "Pure Email Auth.",
-			secret: secret,
-			domain: `^${url.origin}`,
-		}),
-	});
-	if (!res_b.ok) {
-		throw error(500, "Failed to create System Application.");
+	const curves = await get_curves(db);
+	if (curves.length === 0) {
+		log("No curves found, creating default curve");
+
+		const curve = await create_curve(db);
+		log(`Created default curve with id ${curve.id}`);
 	}
 
 	return json({ ok: true });

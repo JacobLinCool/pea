@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator kysely {
+  provider = "prisma-kysely"
+
+  output       = "../src/lib/server/db"
+  fileName     = "types.ts"
+  enumFileName = "enums.ts"
+}
+
+/// We don't use it here, but it's required by Prisma
+datasource db {
+  provider = "sqlite"
+  url      = "file:../db.sqlite"
+}
+
+model User {
+  email        String        @id
+  created      DateTime      @default(now())
+  /// The public profile ID
+  id           String?       @unique
+  /// The public profile display name
+  name         String?
+  /// The public profile biography
+  bio          String?
+  /// The public profile avatar URL
+  avatar       String?
+  applications Application[] @relation("Owner")
+  tokens       Token[]
+  mfa          MFA?
+}
+
+model MFA {
+  user_email String  @id
+  password   String?
+  otp_secret String?
+  user       User    @relation(fields: [user_email], references: [email])
+}
+
+model Token {
+  id         String      @id
+  ip         String
+  user_agent String
+  created    DateTime    @default(now())
+  user_email String
+  app_id     Int
+  curve_id   Int
+  payload    String?
+  user       User        @relation(fields: [user_email], references: [email])
+  app        Application @relation(fields: [app_id], references: [id])
+  curve      Curve       @relation(fields: [curve_id], references: [id])
+}
+
+model Application {
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique
+  created     DateTime @default(now())
+  /// Whether the application is enabled
+  active      Boolean  @default(true)
+  name        String
+  /// The RegEx checker for the callback URL
+  accept_url  String
+  owner_email String
+  /// The RegEx checker for the application user email
+  allowlist   String
+  description String?
+  url         String?
+  logo        String?
+  color       String?
+  owner       User     @relation("Owner", fields: [owner_email], references: [email])
+  tokens      Token[]
+}
+
+model Curve {
+  id      Int      @id @default(autoincrement())
+  created DateTime @default(now())
+  revoked Boolean  @default(false)
+  crv     String
+  x       String
+  y       String
+  d       String
+  tokens  Token[]
+}

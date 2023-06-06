@@ -2,5 +2,5 @@ import { redirect } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async () => {
-	throw redirect(302, "https://github.com/JacobLinCool/pea");
+	throw redirect(302, "/login");
 };

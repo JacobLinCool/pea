@@ -1,20 +1,28 @@
 {
 	"app": {
+		"about": "關於 {name}",
+		"active": "開放使用",
+		"allowlist": "允許的電子郵件",
+		"created_by": "由 {email} 製作",
 		"description": "應用程式說明",
 		"domain": "域",
 		"id": "應用程式 ID",
 		"name": "應用程式名稱",
 		"regexp-for-domain": "允許的域及路徑的正規表達式",
+		"regexps-for-allowlist": "允許的電子郵件的正規表達式",
 		"save": "儲存",
 		"secret": "密鑰",
 		"secret-for-jwt-signing": "用於 JWT 簽名的密鑰",
-		"since": "建立於"
+		"since": "建立於",
+		"website": "網站"
 	},
 	"dash": {
+		"create": "建立",
 		"dev-id": "開發者 ID",
 		"dev-name": "顯示名稱",
 		"pea-developer-dashboard": "PEA 開發者儀表板",
 		"save": "儲存",
+		"update": "更新",
 		"your-dev-id": "您的開發者 ID（無法更改）",
 		"your-dev-name": "您的開發者名稱"
 	},
@@ -25,6 +33,7 @@
 		"email-is-required": "電子信箱是必需的",
 		"invalid-callback": "無效的回調網址",
 		"invalid-email": "無效的電子信箱",
+		"invalid-request": "請求無效，沒有 ip 或用戶代理",
 		"invalid-secret": "無效的密鑰",
 		"not-found": "找不到",
 		"unknown": "未知的錯誤"
