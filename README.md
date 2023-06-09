@@ -68,6 +68,24 @@ https://your.app/callback/url?token=<JWT_TOKEN>
 
 > Both methods require the callback URL matches the pattern in the application settings.
 
+#### Verify the JWT Token
+
+You can verify the JWT token using the public key provided by PEA.
+
+Follows the JWT standard, the JWK sets can be found at `jku` field in the JWT token header.
+
+```json
+{
+  "jku": "https://pea.csie.cool/jwks.json"
+}
+```
+
+Every JWT library should be able to verify the JWT token using the JWK sets.
+
+> If you are using SvelteKit, you can use the [`sveltekit-jwt`](https://github.com/JacobLinCool/sveltekit-jwt) package to verify the JWT token.
+
+```ts
+
 ### For Users
 
 1. Open the application you want to log in to.
