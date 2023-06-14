@@ -18,6 +18,7 @@ log.enabled = true;
 const LoginPayloadSchema = z.object({
 	email: EmailSchema,
 	callback: UrlSchema,
+	show_link: z.boolean().optional(),
 });
 
 /**
@@ -108,7 +109,7 @@ export const POST: RequestHandler = async ({
 	link.searchParams.set("token", token);
 	log("link", link.toString());
 
-	await send(email, payload.email, app, link.toString());
+	await send(email, payload.email, app, link.toString(), payload.show_link ?? false);
 
 	return json({
 		ok: true,
@@ -120,7 +121,13 @@ export const POST: RequestHandler = async ({
 	});
 };
 
-async function send(from: string, to: string, app: Cast<Application>, link: string): Promise<void> {
+async function send(
+	from: string,
+	to: string,
+	app: Cast<Application>,
+	link: string,
+	show_link: boolean,
+): Promise<void> {
 	const req = new Request("https://api.mailchannels.net/tx/v1/send", {
 		method: "POST",
 		headers: { "content-type": "application/json" },
@@ -140,6 +147,7 @@ async function send(from: string, to: string, app: Cast<Application>, link: stri
 						link: link,
 						login: "Login",
 						color: app.color || "#7e22ce",
+						show_link,
 					}),
 				},
 			],

@@ -4,12 +4,14 @@ export default ({
 	link,
 	login,
 	color,
+	show_link,
 }: {
 	head: string;
 	body: string;
 	link: string;
 	login: string;
 	color: string;
+	show_link: boolean;
 }) => `
 <head>
 	<meta name="x-apple-disable-message-reformatting" />
@@ -175,9 +177,11 @@ export default ({
 													</span>
 												</a>
 											</div>
-											<p>
-												<a href="${link}" style="text-decoration: none; font-size: 10px;">${link}</a>
-											</p>
+											${
+												show_link
+													? `<p><a href="${link}" style="text-decoration: none; font-size: 10px; line-height: 12px;">${link}</a></p>`
+													: ""
+											}
 										</td>
 									</tr>
 
