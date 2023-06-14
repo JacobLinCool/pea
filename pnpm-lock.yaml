@@ -14,6 +14,9 @@ devDependencies:
     "@cloudflare/workers-types":
         specifier: ^4.20230518.0
         version: 4.20230518.0
+    "@iconify/svelte":
+        specifier: ^3.1.4
+        version: 3.1.4(svelte@3.59.1)
     "@playwright/test":
         specifier: ^1.34.3
         version: 1.34.3
@@ -989,6 +992,25 @@ packages:
         resolution:
             {
                 integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==,
+            }
+        dev: true
+
+    /@iconify/svelte@3.1.4(svelte@3.59.1):
+        resolution:
+            {
+                integrity: sha512-YDwQlN46ka8KPRayDb7TivmkAPizfTXi6BSRNqa1IV0+byA907n8JcgQafA7FD//pW5XCuuAhVx6uRbKTo+CfA==,
+            }
+        peerDependencies:
+            svelte: "*"
+        dependencies:
+            "@iconify/types": 2.0.0
+            svelte: 3.59.1
+        dev: true
+
+    /@iconify/types@2.0.0:
+        resolution:
+            {
+                integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==,
             }
         dev: true
 

@@ -47,7 +47,8 @@
 		"check-your-email": "查看你的郵件",
 		"enter-your-email": "輸入你的電子信箱",
 		"login": "登入",
-		"login-app-name": "登入 {app}"
+		"login-app-name": "登入 {app}",
+		"you-can-close-this-window": "您現在可以關閉此頁面。"
 	},
 	"welcome": "歡迎使用 PEA",
 	"with-tech": "Pure Email Auth!"
