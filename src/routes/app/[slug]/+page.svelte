@@ -180,7 +180,7 @@
 				<p class="text-center italic text-primary">
 					{email}
 				</p>
-				<p class="text-center text-sm italic text-opacity-50">
+				<p class="text-center text-sm italic opacity-60">
 					{$t("login.you-can-close-this-window")}
 				</p>
 			</div>
