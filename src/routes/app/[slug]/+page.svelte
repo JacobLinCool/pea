@@ -1,6 +1,9 @@
 <script lang="ts">
+	import { get } from "$lib/preference";
 	import { onMount } from "svelte";
 	import { t } from "svelte-i18n";
+	import { z } from "zod";
+	import Icon from "@iconify/svelte";
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
@@ -9,6 +12,22 @@
 	let error = "";
 	let ok = false;
 	let running = false;
+
+	let emails =
+		get<string[]>("emails", {
+			fallback: [],
+			ttl: 12 * 30 * 24 * 60 * 60 * 1000,
+			checker: (value) => {
+				if (!Array.isArray(value)) {
+					return false;
+				}
+
+				z.array(z.string().email().max(256)).parse(value);
+
+				return true;
+			},
+		}) ?? [];
+	$: fast_email = $emails[0];
 
 	onMount(() => {
 		const search = new URLSearchParams(window.location.search);
@@ -39,6 +58,8 @@
 				body: JSON.stringify({ email, callback: url.href }),
 			});
 
+			$emails = [...new Set([email, ...$emails])].slice(0, 3);
+
 			if (!res.ok) {
 				const { message } = await res.json<{ message: string }>();
 				throw new Error(message);
@@ -61,8 +82,7 @@
 			throw new Error($t("error.email-is-required"));
 		}
 
-		const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-		if (!regex.test(email)) {
+		if (!z.string().email().max(256).safeParse(email).success) {
 			throw new Error($t("error.invalid-email"));
 		}
 	}
@@ -103,6 +123,51 @@
 						{$t("login.login")}
 					</button>
 				</div>
+
+				{#if $emails.length}
+					<div class="mt-4 flex w-full justify-between gap-4">
+						<button
+							class="btn-ghost btn-sm btn flex-1 normal-case"
+							on:click={() => {
+								email = fast_email;
+								login();
+							}}
+						>
+							{fast_email}
+						</button>
+
+						{#if $emails.length > 1}
+							<div class="flex-none">
+								<div class="dropdown-end dropdown">
+									<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+									<label tabindex="0" class="btn-square btn-sm btn" for="">
+										<Icon icon="octicon:chevron-down-12" />
+									</label>
+									<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+									<ul
+										tabindex="0"
+										class="dropdown-content menu rounded-box z-10 w-72 bg-base-100 shadow"
+									>
+										{#each $emails as fast_email (fast_email)}
+											<li>
+												<button
+													class="btn-ghost btn-sm btn flex w-full items-center justify-start normal-case"
+													on:click={() => {
+														email = fast_email;
+														login();
+													}}
+												>
+													{fast_email}
+												</button>
+											</li>
+										{/each}
+									</ul>
+								</div>
+							</div>
+						{/if}
+					</div>
+				{/if}
+
 				{#if error}
 					<div class="alert alert-error mt-4">
 						{error}
@@ -114,6 +179,9 @@
 				<h1 class="mb-4 text-3xl font-bold">{$t("login.check-your-email")}</h1>
 				<p class="text-center italic text-primary">
 					{email}
+				</p>
+				<p class="text-center text-sm italic text-opacity-50">
+					{$t("login.you-can-close-this-window")}
 				</p>
 			</div>
 		{/if}

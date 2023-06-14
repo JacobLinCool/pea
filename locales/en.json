@@ -47,7 +47,8 @@
 		"check-your-email": "Check Your Email",
 		"enter-your-email": "Enter Your Email",
 		"login": "Login",
-		"login-app-name": "Login {app}"
+		"login-app-name": "Login {app}",
+		"you-can-close-this-window": "You can now close this window."
 	},
 	"welcome": "Welcome to PEA",
 	"with-tech": "Pure Email Auth!"

@@ -9,8 +9,8 @@
 
 	onMount(() => {
 		lang = get("lang", {
-			default_value: window.navigator.language,
-			ttl: 30 * 24 * 60 * 60 * 1000,
+			fallback: window.navigator.language,
+			ttl: 12 * 30 * 24 * 60 * 60 * 1000,
 		});
 		unsubscribe = lang.subscribe((value) => {
 			if (value) {
