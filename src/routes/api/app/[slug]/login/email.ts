@@ -5,6 +5,7 @@ export default ({
 	login,
 	color,
 	show_link,
+	ttl,
 }: {
 	head: string;
 	body: string;
@@ -12,6 +13,7 @@ export default ({
 	login: string;
 	color: string;
 	show_link: boolean;
+	ttl: number;
 }) => `
 <head>
 	<meta name="x-apple-disable-message-reformatting" />
@@ -146,6 +148,9 @@ export default ({
 											<p style="margin: 0; margin-bottom: 24px">
 												${body}
 											</p>
+											<p style="margin: 0; margin-bottom: 24px">
+												This authorization is valid for <strong>${time(ttl)}</strong>.
+											</p>
 											<div style="line-height: 100%">
 												<a
 													href="${link}"
@@ -221,3 +226,22 @@ export default ({
 	</div>
 </body>
 `;
+
+function time(ttl: number): string {
+	let time = "";
+	if (ttl > 60 * 24) {
+		const day = Math.floor(ttl / (60 * 24));
+		time += `${day} day${day > 1 ? "s" : ""} `;
+		ttl -= day * 60 * 24;
+	}
+	if (ttl > 60) {
+		const hour = Math.floor(ttl / 60);
+		time += `${hour} hour${hour > 1 ? "s" : ""} `;
+		ttl -= hour * 60;
+	}
+	if (ttl > 0) {
+		time += `${ttl} minute${ttl > 1 ? "s" : ""}`;
+	}
+
+	return time.trim();
+}

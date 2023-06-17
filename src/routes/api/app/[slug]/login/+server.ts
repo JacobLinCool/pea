@@ -16,9 +16,15 @@ const log = debug("pea:app:login");
 log.enabled = true;
 
 const LoginPayloadSchema = z.object({
-	email: EmailSchema,
-	callback: UrlSchema,
-	show_link: z.boolean().optional(),
+	email: EmailSchema.describe("Email address of the user"),
+	callback: UrlSchema.describe("Callback URL for the application"),
+	show_link: z.boolean().optional().describe("Show the link in the email"),
+	ttl: z
+		.number()
+		.positive()
+		.max(60 * 24 * 30 * 12)
+		.default(60 * 24)
+		.describe("Time to live in minutes"),
 });
 
 /**
@@ -70,7 +76,7 @@ export const POST: RequestHandler = async ({
 
 	const jti = "x" + Date.now().toString(36) + Math.random().toString(36).substring(2, 10);
 	const iat = Math.floor(Date.now() / 1000);
-	const exp = iat + 60 * 60 * 24;
+	const exp = iat + payload.ttl * 60;
 
 	const token = await JWT.sign(
 		{
@@ -109,7 +115,7 @@ export const POST: RequestHandler = async ({
 	link.searchParams.set("token", token);
 	log("link", link.toString());
 
-	await send(email, payload.email, app, link.toString(), payload.show_link ?? false);
+	await send(email, payload.email, app, link.toString(), payload.show_link ?? false, payload.ttl);
 
 	return json({
 		ok: true,
@@ -127,6 +133,7 @@ async function send(
 	app: Cast<Application>,
 	link: string,
 	show_link: boolean,
+	ttl: number,
 ): Promise<void> {
 	const req = new Request("https://api.mailchannels.net/tx/v1/send", {
 		method: "POST",
@@ -148,6 +155,7 @@ async function send(
 						login: "Login",
 						color: app.color || "#7e22ce",
 						show_link,
+						ttl,
 					}),
 				},
 			],

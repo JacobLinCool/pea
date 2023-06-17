@@ -12,6 +12,7 @@
 	let error = "";
 	let ok = false;
 	let running = false;
+	let ttl: number | undefined = undefined;
 
 	let emails =
 		get<string[]>("emails", {
@@ -35,6 +36,13 @@
 		if (search.has("email")) {
 			email = search.get("email") ?? "";
 		}
+
+		if (search.has("ttl")) {
+			const n = parseInt(search.get("ttl") ?? "", 10);
+			if (n > 0) {
+				ttl = n;
+			}
+		}
 	});
 
 	async function login() {
@@ -55,7 +63,7 @@
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ email, callback: url.href }),
+				body: JSON.stringify({ email, callback: url.href, ttl }),
 			});
 
 			$emails = [...new Set([email, ...$emails])].slice(0, 3);
