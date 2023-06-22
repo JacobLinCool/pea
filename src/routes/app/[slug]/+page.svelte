@@ -12,7 +12,7 @@
 	let error = "";
 	let ok = false;
 	let running = false;
-	let ttl: number | undefined = undefined;
+	let ttl = 60 * 24;
 
 	let emails =
 		get<string[]>("emails", {
