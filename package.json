@@ -55,7 +55,7 @@
 		"svelte-i18n": "^3.6.0",
 		"sveltekit-api": "^0.2.11",
 		"sveltekit-db": "^0.1.1",
-		"sveltekit-jwt": "^0.1.0",
+		"sveltekit-jwt": "^0.2.0",
 		"sveltekit-superforms": "1.0.0-rc.3",
 		"tailwindcss": "^3.3.2",
 		"tslib": "^2.5.2",
