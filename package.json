@@ -41,7 +41,7 @@
 		"eslint-config-prettier": "^8.8.0",
 		"eslint-plugin-svelte3": "^4.0.0",
 		"husky": "^8.0.3",
-		"kysely": "^0.25.0",
+		"kysely": "^0.27.0",
 		"kysely-d1": "^0.3.0",
 		"lint-staged": "^13.2.2",
 		"postcss": "^8.4.24",
