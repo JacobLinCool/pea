@@ -45,7 +45,7 @@
 		"kysely-d1": "^0.3.0",
 		"lint-staged": "^13.2.2",
 		"postcss": "^8.4.24",
-		"prettier": "^2.8.8",
+		"prettier": "^3.0.0",
 		"prettier-plugin-svelte": "^2.10.1",
 		"prettier-plugin-tailwindcss": "^0.3.0",
 		"prisma": "^4.15.0",
